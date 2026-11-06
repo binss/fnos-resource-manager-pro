@@ -1,0 +1,45 @@
+{
+  "description": "Read-only compatibility snapshot; these fnOS assets are not redistributed.",
+  "assets": [
+    {
+      "route": "index.js",
+      "file": "index-D1auxRov.js",
+      "sha256": "e389859325213e39556d291ae1e7a5a79e18e92aab84c3aad53cb0b0ff43b9d6"
+    },
+    {
+      "route": "resource.js",
+      "file": "ResourceMonitor-D36dIPD-.js",
+      "sha256": "3475e705309c897b493f04db06b9dce287bfbd3574d79c5f803ba8b26d770e39"
+    },
+    {
+      "route": "cpu-chart.js",
+      "file": "CPUChart-0mxysVWh.js",
+      "sha256": "96aec47298758294ac25c3e6dddbec7d1f0cef94ad0b751add98490fc590f352"
+    },
+    {
+      "route": "memory-chart.js",
+      "file": "MemChart-zb089-Xa.js",
+      "sha256": "1c84d95ffde2a3207449993b4de0c260c22073345bb1a639ff61a59d804c74e7"
+    },
+    {
+      "route": "network-chart.js",
+      "file": "NetChart-CGIW6U7D.js",
+      "sha256": "d192a4db8f40a28a4672958fddd7f52b9601482658d5e7d4e5bfc8ef3a697cdf"
+    },
+    {
+      "route": "gpu-chart.js",
+      "file": "GPUChart-nl4G5f1C.js",
+      "sha256": "74124800e36dd779c9468a3d3274e494a96d1c2e7afd1781eaa127cae90730e8"
+    },
+    {
+      "route": "layout.js",
+      "file": "AppLayoutTabs-N7iHeqJH.js",
+      "sha256": "0dc03aeb8110738ad1cce42bf443c9dd0966be91ba1b217751e5087c0bfe0051"
+    },
+    {
+      "route": "appview.js",
+      "file": "appview-Dj9klTDM.js",
+      "sha256": "8af74d054b3db00afc98a7d3601d2c215a2e177e2a5059732b22f058180c2cee"
+    }
+  ]
+}

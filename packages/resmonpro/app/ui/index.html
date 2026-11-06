@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>资源管理 Pro</title>
+<link rel="stylesheet" href="style.css">
+<script defer src="panel.js"></script>
+</head>
+<body>
+<nav aria-label="资源管理">
+  <div class="nav-title"><span aria-hidden="true">▥</span> 性能</div>
+  <button data-page="overview" aria-current="page">概览</button>
+  <button data-page="cpu">CPU</button>
+  <button data-page="memory">内存</button>
+  <button data-page="history" class="history-nav"><span aria-hidden="true">◷</span> 历史</button>
+</nav>
+<main>
+  <header><h1 id="heading">性能概览</h1><span id="mode" class="mode">实时</span></header>
+  <section id="cards" aria-label="当前使用率"></section>
+  <section class="chart-panel">
+    <div class="chart-header">
+      <h2 id="chart-title">使用率</h2>
+      <div id="ranges" role="group" aria-label="历史时间范围" hidden>
+        <button data-hours="1" aria-pressed="false">1 小时</button>
+        <button data-hours="24" aria-pressed="true">24 小时</button>
+        <button data-hours="168" aria-pressed="false">7 天</button>
+        <button data-hours="720" aria-pressed="false">30 天</button>
+      </div>
+    </div>
+    <div id="legend"></div>
+    <div id="plot"></div>
+    <p id="status" role="status">正在读取数据…</p>
+  </section>
+</main>
+</body>
+</html>

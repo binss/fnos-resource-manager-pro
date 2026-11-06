@@ -1,0 +1,10 @@
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const html=fs.readFileSync(__dirname+'/../packages/resmonpro/app/ui/temperature.html','utf8');
+const source=html.split('<script>').at(-1).split('</script>')[0];
+const context={localStorage:{getItem(){return null;}},result:null};vm.createContext(context);
+vm.runInContext(source.slice(0,source.indexOf('function statusFor(')),context);
+vm.runInContext("result=deviceName({kind:'cpu',model:'k10temp'});",context);assert.equal(context.result,'CPU · k10temp');
+vm.runInContext("result=deviceName({kind:'network',key:'/0000:02:00.0/',model:'r8169'});",context);assert.equal(context.result,'Network · r8169');
+vm.runInContext("deviceAliases={cpu:{k10temp:'CPU · Custom Model'},network:{r8169:'Ethernet · Custom'}};result=deviceName({kind:'cpu',model:'k10temp'});",context);assert.equal(context.result,'CPU · Custom Model');
+vm.runInContext("result=displayName({kind:'disk',model:'FN N7 128GB',device:'nvme0n1',sensor:'Sensor 2',primary:false});",context);assert.equal(context.result,'SSD · FN N7 128GB · Sensor 2');
+console.log('PASS: configurable aliases, truthful fallbacks and distinct auxiliary sensor labels');

@@ -1,0 +1,58 @@
+:root {
+  color-scheme: light dark;
+  --surface: #fff;
+  --rail: #f8f9fb;
+  --border: #e6e9ee;
+  --text: #20262f;
+  --muted: #667181;
+  --blue: #1677df;
+  --teal: #008970;
+  --selected: #e7f1fd;
+  font: 14px system-ui, -apple-system, "PingFang SC", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surface: #191b20;
+    --rail: #20232a;
+    --border: #343941;
+    --text: #e8ebf0;
+    --muted: #aab2c0;
+    --blue: #62aaff;
+    --teal: #4ad5b3;
+    --selected: #243b56;
+  }
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { display: grid; grid-template-columns: clamp(128px, 22%, 220px) minmax(0, 1fr); min-height: 100vh; margin: 0; color: var(--text); background: var(--surface); }
+nav { background: var(--rail); border-right: 1px solid var(--border); padding: 12px 8px; }
+.nav-title { font-weight: 600; padding: 10px 12px; }
+.nav-title span, .history-nav span { padding-right: 7px; }
+button { cursor: pointer; color: inherit; font: inherit; background: transparent; }
+button:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+nav button { display: block; width: 100%; padding: 9px 12px 9px 34px; text-align: left; border: 0; border-radius: 7px; }
+nav button.history-nav { margin-top: 12px; padding-left: 12px; font-weight: 600; }
+nav button:hover, nav button[aria-current] { background: var(--selected); color: var(--blue); }
+main { padding: 21px 22px; min-width: 0; }
+header, .chart-header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; }
+h1 { margin: 0 0 2px; font-size: 20px; }
+h2 { margin: 0; font-size: 15px; }
+.mode { font-size: 12px; color: var(--blue); background: var(--selected); border-radius: 5px; padding: 3px 8px; }
+#cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(135px, 1fr)); gap: 12px; margin: 15px 0; }
+.card, .chart-panel { padding: 15px; border: 1px solid var(--border); border-radius: 10px; }
+.card strong { display: block; margin: 5px 0; font-size: 27px; font-variant-numeric: tabular-nums; }
+.card small, #status { color: var(--muted); }
+#ranges { display: flex; flex-wrap: wrap; gap: 4px; padding: 3px; background: var(--rail); border-radius: 7px; }
+#ranges button { padding: 4px 9px; border: 0; border-radius: 5px; }
+#ranges button[aria-pressed=true] { color: var(--blue); background: var(--selected); font-weight: 600; }
+#legend { display: flex; gap: 18px; font-size: 12px; margin-top: 12px; }
+#legend span::before { display: inline-block; content: ""; width: 8px; height: 8px; border-radius: 50%; background: currentColor; margin-right: 6px; }
+#plot { margin-top: 8px; }
+#plot svg { width: 100%; display: block; }
+#status { font-size: 12px; margin: 10px 0 0; }
+@media (max-width: 520px) {
+  body { grid-template-columns: 91px minmax(0, 1fr); }
+  main { padding: 14px 10px; }
+  nav button { padding-left: 18px; }
+  .chart-panel, .card { padding: 10px; }
+}

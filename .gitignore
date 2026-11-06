@@ -1,0 +1,21 @@
+# Local vendor tools, original fnOS assets, personal aliases
+/tools/private/
+/assets/private/
+# Builds and runtime data
+/dist/
+/build/
+*.fpk
+*.sqlite*
+*.db
+*.db-*
+*.jsonl
+*.log
+*.pid
+**/seed/
+**/test-data/
+__pycache__/
+*.py[cod]
+.DS_Store
+.env
+.env.*
+!.env.example

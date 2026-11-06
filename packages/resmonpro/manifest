@@ -1,0 +1,12 @@
+appname = resmonpro
+version = 1.0.0
+display_name = 资源管理 Pro
+desc = 飞牛运行状态、硬件温度叠加曲线、进程管理与最近 30 天资源历史趋势。
+platform = all
+source = thirdparty
+maintainer = binss
+distributor = binss
+desktop_uidir = ui
+desktop_applaunchname = resmonpro.Application
+ctl_stop = true
+checkport = false

@@ -1,0 +1,11 @@
+{
+  "cpu": {
+    "example-cpu-driver": "CPU \u00b7 Your CPU Model"
+  },
+  "gpu": {
+    "example-gpu-driver": "GPU \u00b7 Your GPU Model"
+  },
+  "network": {
+    "example-network-sensor": "Ethernet 1 \u00b7 Model \u00b7 2.5GbE"
+  }
+}

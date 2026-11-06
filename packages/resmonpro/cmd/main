@@ -1,0 +1,43 @@
+#!/bin/bash
+set -u
+PID_FILE="${TRIM_PKGVAR}/app.pid"
+SERVER="${TRIM_APPDEST}/service.py"
+status() {
+    [ -r "$PID_FILE" ] || return 1
+    read -r pid < "$PID_FILE"
+    [[ "$pid" =~ ^[0-9]+$ ]] || return 1
+    kill -0 "$pid" 2>/dev/null || return 1
+    tr '\0' '\n' < "/proc/$pid/cmdline" | grep -Fxq "$SERVER"
+}
+case "${1:-}" in
+    start)
+        status && exit 0
+        command -v python3 >/dev/null || { echo '需要系统 Python 3' > "$TRIM_TEMP_LOGFILE"; exit 1; }
+        mkdir -p "$TRIM_PKGVAR"
+        nohup /usr/bin/python3 "$SERVER" >> "${TRIM_PKGVAR}/service.log" 2>&1 < /dev/null &
+        echo "$!" > "$PID_FILE"
+        for i in {1..20}; do
+            if [ -s "${TRIM_PKGVAR}/history.sqlite3" ] && status; then
+                if /usr/bin/python3 -c 'import urllib.request; urllib.request.urlopen("http://127.0.0.1:39188/api/current",timeout=1)' 2>/dev/null; then
+                    rm -f "$TRIM_TEMP_LOGFILE"
+                    exit 0
+                fi
+            fi
+            status || break
+            sleep 1
+        done
+        if status; then kill -TERM "$pid"; fi
+        echo '资源采集服务启动失败，请查看应用数据目录 service.log' > "$TRIM_TEMP_LOGFILE"
+        exit 1
+        ;;
+    stop)
+        if status; then
+            kill -TERM "$pid"
+            for i in {1..10}; do status || break; sleep 1; done
+            if status; then exit 1; fi
+        fi
+        rm -f "$PID_FILE"
+        ;;
+    status) status && exit 0; exit 3 ;;
+    *) exit 1 ;;
+esac
