@@ -3,7 +3,3 @@ Hardware temperature collection is built into Resource Manager Pro.
 service.py supervises monitor.py and temperature/server.py under the package user.
 The temperature worker listens only on 127.0.0.1:39188 and stores its SQLite database,
 backups and logs under /var/apps/resmonpro/var/temperature.
-
-Legacy Thermoboard data must be migrated once before the new worker starts.
-Use scripts/migrate_thermoboard.py from the source project and retain its backup.
-After verifying history and continued sampling, the legacy FPK may be uninstalled.

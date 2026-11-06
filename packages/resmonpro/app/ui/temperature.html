@@ -123,7 +123,7 @@ let selected=new Set(),initialized=false;
 let dimmed=new Set();
 try {const saved=JSON.parse(localStorage.getItem('resmonpro.temperature.dimmed'));if(Array.isArray(saved))dimmed=new Set(saved);}catch{}
 function toggleDimmed(key){dimmed.has(key)?dimmed.delete(key):dimmed.add(key);try{localStorage.setItem('resmonpro.temperature.dimmed',JSON.stringify([...dimmed]));}catch{}render();}
-try{const saved=JSON.parse(localStorage.getItem('thermoboard.overlay.selection'));if(Array.isArray(saved)){selected=new Set(saved);initialized=true;}}catch{}
+try{const saved=JSON.parse(localStorage.getItem('resmonpro.temperature.overlay.selection'));if(Array.isArray(saved)){selected=new Set(saved);initialized=true;}}catch{}
 const fmt=v=>Number.isFinite(v)?v.toFixed(0):'—';
 function allRows(){return [...(data?.sample.readings||[])].sort((a,b)=>order.indexOf(a.kind)-order.indexOf(b.kind)||sortName(a).localeCompare(sortName(b)));}
 function availableRows(){return allRows().filter(r=>extras||(r.primary&&r.kind!=='acpi'));}
@@ -167,7 +167,7 @@ function sortName(r){
  return r.key;
 }
 function activeRows(){return availableRows().filter(r=>selected.has(r.key));}
-function persist(){try{localStorage.setItem('thermoboard.overlay.selection',JSON.stringify([...selected]));}catch{}}
+function persist(){try{localStorage.setItem('resmonpro.temperature.overlay.selection',JSON.stringify([...selected]));}catch{}}
 function toggle(key){selected.has(key)?selected.delete(key):selected.add(key);persist();render();}
 function statusFor(r){if(r.hardware_alarm||r.at_critical)return ['danger','硬件告警'];if(r.max_c!=null&&r.temperature_c>=r.max_c)return ['warning','达到硬件上限'];return ['','已读取'];}
 function overview(){

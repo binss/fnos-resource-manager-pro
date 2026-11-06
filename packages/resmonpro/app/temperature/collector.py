@@ -11,7 +11,7 @@ import socket
 import subprocess
 from zoneinfo import ZoneInfo
 
-DATA = Path(os.environ.get('TRIM_PKGVAR', str(Path.home() / '.local/share/thermoboard')))
+DATA = Path(os.environ.get('TRIM_PKGVAR', str(Path.home() / '.local/share/resmonpro/temperature')))
 TZ = ZoneInfo('Asia/Shanghai')
 
 

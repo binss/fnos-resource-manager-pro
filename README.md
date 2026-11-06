@@ -1,6 +1,6 @@
 # 资源管理 Pro · Resource Manager Pro for fnOS
 
-面向飞牛 fnOS 的 Python FPK 项目：运行状态历史、进程管理，以及多硬件温度叠加曲线。
+基于飞牛 fnOS 原版资源管理改进，保留原有界面风格与进程管理，新增资源负载历史曲线和多硬件温度曲线。使用 Python 实现后台持续采集，以 FPK 形式安装。
 
 ## 功能
 
@@ -13,11 +13,9 @@
 
 ## 单个 FPK
 
-`packages/resmonpro` 包含运行状态、进程管理、温度采集与温度页。资源采集器和温度采集器由同一个 Pro 服务管理，**不再依赖独立 Thermoboard 应用**。
+`packages/resmonpro` 包含运行状态、进程管理、温度采集与温度页。资源采集器和温度采集器由同一个 Pro 服务管理。
 
 NAS 端使用系统 Python 3 标准库、Linux `/proc`、`/sys` 与 `lsblk`，无需 pip、Docker 或 CDN。实机使用 Python 3.11。macOS 只用于编辑、检查和打包，不用于读取 NAS 硬件。
-
-已有 Thermoboard 数据可用 [迁移脚本](scripts/migrate_thermoboard.py) 整体迁入 Pro，步骤见 [安装说明](docs/INSTALL.md)。
 
 ## 本地检查
 

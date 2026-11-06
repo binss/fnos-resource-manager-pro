@@ -16,25 +16,12 @@ ROOT=Path(__file__).resolve().parents[1]
 TEMPERATURE=ROOT/'packages/resmonpro/app/temperature'
 sys.path.insert(0,str(TEMPERATURE))
 from storage import Store
-spec=importlib.util.spec_from_file_location('migration',ROOT/'scripts/migrate_thermoboard.py')
-migration=importlib.util.module_from_spec(spec);spec.loader.exec_module(migration)
 
 def fixture():
     return {'timestamp':dt.datetime.now(dt.timezone.utc).isoformat(),'host':'test-nas','errors':[], 'readings':[
         {'key':'cpu:test:Tctl','kind':'cpu','model':'test-cpu','device':'test','sensor':'Tctl','primary':True,'temperature_c':42.0,'hardware_alarm':False,'at_critical':False,'max_c':None,'critical_c':None}]}
 
 class IntegrationTests(unittest.TestCase):
-    def test_migration_preserves_history_and_backups(self):
-        with tempfile.TemporaryDirectory() as temp:
-            root=Path(temp);store=Store(root/'old');store.record(fixture());store.maintain(force=True)
-            before=migration.inventory(store.path)
-            report=migration.migrate(root/'old',root/'new',root/'rescue')
-            self.assertEqual(before,report['rows'])
-            self.assertEqual(before,migration.inventory(root/'new/history.sqlite3'))
-            self.assertEqual(before,migration.inventory(root/'rescue/history.sqlite3'))
-            self.assertGreater(report['backup_files'],0)
-            with self.assertRaises(RuntimeError):migration.migrate(root/'old',root/'new',root/'another-rescue')
-
     def test_temperature_http_api(self):
         with tempfile.TemporaryDirectory() as temp:
             os.environ['TRIM_PKGVAR']=temp

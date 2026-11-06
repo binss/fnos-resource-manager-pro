@@ -8,24 +8,6 @@
 
 资源与温度采集由 Pro 同时启停，无需安装独立温度应用。
 
-## 从旧 Thermoboard 迁移
-
-应在新版 Pro 第一次启动温度采集器之前迁移，避免生成一份新的温度库。
-
-1. 停止旧 Thermoboard 和旧版 Pro。
-2. 将源码迁移脚本放到 NAS，指定一个新的、明确的备份目录，并由管理员执行：
-
-```sh
-sudo python3 scripts/migrate_thermoboard.py --backup /YOUR_BACKUP_DIRECTORY/thermoboard-before-migration
-```
-
-脚本默认从 `/var/apps/thermoboard/var` 复制到 `/var/apps/resmonpro/var/temperature`，通过 SQLite backup API 建立独立备份，核对采样、温度点、传感器、每日统计和事件的记录数，复制原备份文件并修正 Pro 用户所有权。目标非空时拒绝覆盖，旧服务仍运行时拒绝迁移。
-
-3. 升级并启动新版 Pro，确认历史、备份和新增采样正常。
-4. 再通过应用中心卸载旧 Thermoboard。保留迁移备份，直到确认升级稳定。
-
-如果已经误启动新版并产生了新温度库，先停 Pro 并另外备份，不要直接覆盖或删除任一数据库；迁移脚本不会自动合并两份已经分叉的历史。
-
 直接打开 CGI 链接而没有有效登录态可能返回 `invalid token`。应从已登录的 fnOS 桌面启动应用；不要把后端回环端口暴露到局域网或公网。
 
 ## AMD GPU 的 Compute / Encoder
