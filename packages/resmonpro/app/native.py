@@ -123,6 +123,9 @@ def page():
     if (!["auto","mobile","desktop"].includes(value)) return;
     layoutMode = value;
     try {{localStorage.setItem("resmonpro.layout",value);}} catch {{}}
+    if (value === "mobile" || (value === "auto" && (innerWidth <= 640 || (matchMedia("(pointer:coarse)").matches && innerWidth <= 1024)))) {{
+      const target = new URL(location.href); target.pathname = "{ENTRY}/mobile"; target.searchParams.delete("view"); location.replace(target); return;
+    }}
     const url = new URL(location.href); url.searchParams.delete("view"); history.replaceState(null,"",url);
     applyProLayout(); window.dispatchEvent(new Event("resize"));
   }}}};

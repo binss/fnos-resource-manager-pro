@@ -37,6 +37,7 @@ sudo systemctl disable --now resmonpro-gpu.service
 | Pro 资源历史 | `/var/apps/resmonpro/var/history.sqlite3` |
 | 温度历史与统计 | `/var/apps/resmonpro/var/temperature/history.sqlite3` |
 | 温度备份 | `/var/apps/resmonpro/var/temperature/backups/` |
+| 手机实时计数缓存（非历史） | `/var/apps/resmonpro/var/mobile-counters.json` |
 | 应用日志 | 各应用 `var/` 目录 |
 
 传感器元数据可能包含主机名、硬盘序列号和设备路径。不要将这些运行目录作为项目源码提交。

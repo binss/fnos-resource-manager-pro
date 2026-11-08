@@ -17,7 +17,11 @@ import native
 path = urlsplit(os.environ.get("REQUEST_URI", "")).path.partition("index.cgi")[2] or "/"
 method = os.environ.get("REQUEST_METHOD", "GET")
 status, mime = "200 OK", "application/json"
-static = {"/native/mobile.css": ("mobile.css", "text/css; charset=utf-8"),
+static = {"/gateway.js": ("gateway.js", "application/javascript; charset=utf-8"),
+          "/mobile": ("phone.html", "text/html; charset=utf-8"),
+          "/phone.js": ("phone.js", "application/javascript; charset=utf-8"),
+          "/phone.css": ("phone.css", "text/css; charset=utf-8"),
+          "/native/mobile.css": ("mobile.css", "text/css; charset=utf-8"),
           "/temperature/device-aliases.json": ("device-aliases.json", "application/json; charset=utf-8"),
           "/temperature/": ("temperature.html", "text/html; charset=utf-8"),
           "/basic": ("index.html", "text/html; charset=utf-8"),
@@ -27,11 +31,15 @@ try:
     if method not in ("GET", "HEAD"):
         status, body = "405 Method Not Allowed", b'{"error":"Method not allowed"}'
     elif path == "/":
-        print("Status: 302 Found\r\nLocation: " + native.ENTRY + "/native\r\nCache-Control: no-store\r\n\r\n", end="")
-        raise SystemExit
+        mime = "text/html; charset=utf-8"
+        body = (root / "ui" / "phone.html").read_bytes()
     elif path == "/native":
         mime = "text/html; charset=utf-8"
-        if all((native.WEB / "assets" / name).is_file() for name in native.ASSETS.values()):
+        params = parse_qs(os.environ.get("QUERY_STRING", ""))
+        phone = any(device in os.environ.get("HTTP_USER_AGENT", "").lower() for device in ("iphone", "ipod", "android"))
+        if phone and params.get("view", [""])[0] != "desktop":
+            body = (root / "ui" / "phone.html").read_bytes()
+        elif all((native.WEB / "assets" / name).is_file() for name in native.ASSETS.values()):
             body = native.page().encode()
         else:
             body = (root / "ui" / "index.html").read_bytes()
@@ -62,6 +70,9 @@ try:
                 mime, body = "application/json", b'{"error":"Temperature request failed"}'
             except OSError:
                 status, body = "503 Service Unavailable", '{"error":"温度采集服务暂不可用，请在应用中心重新启动资源管理 Pro"}'.encode()
+    elif path == "/api/summary":
+        from mobile_data import summary
+        body = json.dumps(summary()).encode()
     elif path == "/api/recent":
         body = json.dumps(recent()).encode()
     elif path == "/api/live":

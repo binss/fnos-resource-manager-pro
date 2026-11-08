@@ -22,6 +22,8 @@ with tempfile.TemporaryDirectory(prefix='resmon-source-check-') as directory:
                 target=temporary/('inline-'+str(index)+'.js');target.write_text(part.split('</script>',1)[0]);subprocess.run(['node','--check',str(target)],check=True)
 subprocess.run([sys.executable,str(ROOT/'tests/test_storage.py')],check=True)
 subprocess.run([sys.executable,str(ROOT/'tests/test_integration.py')],check=True)
+subprocess.run([sys.executable,str(ROOT/'tests/test_mobile_data.py')],check=True)
+subprocess.run(['node',str(ROOT/'tests/phone_gateway.cjs')],check=True)
 subprocess.run(['node',str(ROOT/'tests/temperature_spline.cjs')],check=True)
 subprocess.run(['node',str(ROOT/'tests/device_aliases.cjs')],check=True)
 print('PASS: Python/CGI syntax, lifecycle shell syntax, JavaScript syntax, storage and chart regression checks')
