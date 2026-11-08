@@ -45,7 +45,19 @@ export {ProShell};
         code = f'import {{ProShell}} from "{ENTRY}/native/index.js";\n' + code
     elif name == "layout.js":
         code = replace_one(code, 'minWidth:1100', 'minWidth:0')
+        code = replace_one(code, 'className:`flex size-full flex-row`,ref:t',
+                           'className:`pro-app-tabs flex size-full flex-row`,ref:t')
+        code = replace_one(code, 'className:`flex flex-col pt-2`,children:',
+                           'className:`pro-app-navigation flex flex-col pt-2`,children:')
+        code = replace_one(code, 'className:`w-0 flex-1 overflow-auto`,style:',
+                           'className:`pro-app-content w-0 flex-1 overflow-auto`,style:')
     elif name == "resource.js":
+        code = replace_one(code, 'className:`gap-4 pb-7`,minWidthCount:3',
+                           'className:`pro-overview-grid gap-4 pb-7`,minWidthCount:3')
+        code = replace_one(code, 'M(`flex flex-col items-start overflow-hidden rounded-2xl',
+                           'M(`pro-overview-card flex flex-col items-start overflow-hidden rounded-2xl')
+        code = replace_one(code, 'className:`size-full overscroll-x-auto`',
+                           'className:`pro-resource-tabs size-full overscroll-x-auto`')
         code = replace_one(code, 'component:ri}];return',
                            'component:ri},{icon:ProTemperatureIcon,key:`hardware-temperature`,title:`硬件温度`,component:ProTemperature}];return')
         code = replace_one(code, 'Or=()=>(0,R.jsx)(ze,{component:Dr})',
@@ -81,6 +93,7 @@ def page():
   history.replaceState(null, "", proUrl);
   // fnOS remembers iframe window geometry per user; migrate this app once only.
   try {{
+    if (matchMedia("(max-width: 640px)").matches) throw new Error("Compact viewport");
     const desktop = window.parent;
     const width = Math.min(1280, Math.max(640, desktop.innerWidth - 100));
     const height = Math.min(800, Math.max(480, desktop.innerHeight - 70));
@@ -124,7 +137,7 @@ html, body, #root { height: 100%; margin: 0; overflow: hidden; }
 @media(max-width:760px) { .pro-shell [role=tablist][aria-orientation=vertical] { width:125px!important; } }
 
 </style>"""
-    html = replace_one(html, "</head>", style + "</head>")
+    html = replace_one(html, "</head>", style + f'<link rel="stylesheet" href="{ENTRY}/native/mobile.css">' + "</head>")
     recovery = f'''<aside id="pro-recovery" hidden style="position:fixed;bottom:12px;right:12px;z-index:99999;padding:10px;background:var(--semi-color-bg-0,#fff);border:1px solid var(--semi-color-border,#ddd);border-radius:6px">
 原版界面仍在加载。 <a href="{ENTRY}/basic">打开基础视图</a>
 </aside>

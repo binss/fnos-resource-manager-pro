@@ -1,0 +1,49 @@
+/* The stock resource monitor uses a desktop sidebar and a three-column grid.
+   Keep its components, with an explicit compact layout for app WebViews. */
+@media (max-width: 640px) {
+  .pro-shell { height:100%; max-height:100dvh; }
+  .pro-shell .pro-app-tabs { flex-direction:column; min-width:0; }
+  .pro-shell .pro-app-navigation { flex:none; width:100%; padding-top:0; }
+  .pro-shell .pro-app-navigation [role=tablist][aria-orientation=vertical] {
+    display:flex; flex-direction:row; width:100%!important; height:auto;
+    padding:6px 8px; gap:4px; overflow-x:auto;
+  }
+  .pro-shell .pro-app-navigation [role=tab] {
+    flex:1 0 auto; width:auto!important; min-height:36px; margin:0;
+  }
+  .pro-shell .pro-app-navigation [role=tab] > div { justify-content:center; }
+  .pro-shell .pro-app-content {
+    width:100%; min-width:0; min-height:0; padding:0!important;
+    padding-bottom:env(safe-area-inset-bottom,0px)!important;
+  }
+  .pro-shell .pro-app-content > [role=tabpanel] { width:100%; min-width:0!important; }
+  .pro-range-bar { padding:8px 12px!important; gap:6px!important; }
+  .pro-range-bar > [role=status] { flex-basis:100%; }
+  .pro-range-bar > [role=group] { width:100%; flex-wrap:nowrap!important; }
+  .pro-range-bar button { flex:1; padding:3px 5px!important; }
+  .pro-shell .semi-tabs-bar {
+    display:flex; flex-wrap:nowrap; overflow-x:auto; padding-left:12px;
+    scrollbar-width:none; min-height:44px; flex-shrink:0;
+  }
+  .pro-shell .semi-tabs-bar [role=tab] {
+    flex-shrink:0; white-space:nowrap; margin-right:22px;
+  }
+  .pro-shell .semi-tabs-content { min-width:0; }
+  .pro-shell .pro-overview-grid {
+    display:grid!important; grid-template-columns:minmax(0,1fr)!important;
+    gap:12px!important; padding-bottom:16px;
+  }
+  .pro-shell .pro-overview-grid > *, .pro-shell .pro-overview-card {
+    width:100%!important; min-width:0; max-width:100%;
+  }
+  .pro-shell .pro-overview-card p { overflow-wrap:anywhere; }
+  .pro-shell .pro-performance-body { overscroll-behavior-y:contain; }
+  .pro-shell .h-\[300px\] { height:220px!important; flex-shrink:0; }
+  .pro-shell .gap-3.text-base.leading-tight { font-size:12px; gap:6px; }
+  .pro-shell .gap-x-10 { column-gap:16px; }
+  .pro-shell .gap-x-5 { column-gap:10px; }
+  .pro-shell .semi-table-container { overflow-x:auto; max-width:100%; }
+  .pro-shell .semi-table { min-width:0; }
+  .pro-shell .pro-resource-tabs [role=tabpanel] { min-width:0; }
+  .pro-shell .recharts-default-tooltip { max-width:calc(100vw - 32px); white-space:normal; }
+}

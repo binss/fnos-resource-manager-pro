@@ -17,7 +17,8 @@ import native
 path = urlsplit(os.environ.get("REQUEST_URI", "")).path.partition("index.cgi")[2] or "/"
 method = os.environ.get("REQUEST_METHOD", "GET")
 status, mime = "200 OK", "application/json"
-static = {"/temperature/device-aliases.json": ("device-aliases.json", "application/json; charset=utf-8"),
+static = {"/native/mobile.css": ("mobile.css", "text/css; charset=utf-8"),
+          "/temperature/device-aliases.json": ("device-aliases.json", "application/json; charset=utf-8"),
           "/temperature/": ("temperature.html", "text/html; charset=utf-8"),
           "/basic": ("index.html", "text/html; charset=utf-8"),
           "/panel.js": ("panel.js", "application/javascript; charset=utf-8"),
