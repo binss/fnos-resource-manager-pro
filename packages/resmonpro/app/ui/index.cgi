@@ -38,9 +38,9 @@ try:
     elif path.startswith("/native/") and path.removeprefix("/native/") in native.ASSETS:
         mime = "application/javascript; charset=utf-8"
         body = native.module(path.removeprefix("/native/")).encode()
-    elif path == "/native/history.js":
+    elif path in ("/native/history.js", "/native/mobile.js"):
         mime = "application/javascript; charset=utf-8"
-        body = (root / "ui" / "history.js").read_bytes()
+        body = (root / "ui" / path.rsplit("/",1)[1]).read_bytes()
     elif path in static:
         file, mime = static[path]
         body = (root / "ui" / file).read_bytes()

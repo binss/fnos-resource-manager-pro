@@ -52,10 +52,18 @@ export {ProShell};
         code = replace_one(code, 'className:`w-0 flex-1 overflow-auto`,style:',
                            'className:`pro-app-content w-0 flex-1 overflow-auto`,style:')
     elif name == "resource.js":
+        code = code.replace('(0,R.jsx)(ge,{', '(0,R.jsx)(ProTable,{')
+        code = replace_one(code, '(0,R.jsx)(dr,{})',
+                           '(0,R.jsx)(`div`,{className:`pro-overview-disks`,children:(0,R.jsx)(dr,{})})')
+        code = replace_one(code, 'wr=()=>(0,R.jsxs)(Qe,', 'wr=()=>(0,R.jsxs)(ProOverviewGrid,')
         code = replace_one(code, 'className:`gap-4 pb-7`,minWidthCount:3',
                            'className:`pro-overview-grid gap-4 pb-7`,minWidthCount:3')
         code = replace_one(code, 'M(`flex flex-col items-start overflow-hidden rounded-2xl',
                            'M(`pro-overview-card flex flex-col items-start overflow-hidden rounded-2xl')
+        code = replace_one(code, 'className:`flex h-full flex-col justify-start gap-5 overflow-hidden`,children:[(0,R.jsx)(Dt,{title:e(`performance.cpu.title`)',
+                           'className:`pro-cpu-panel flex h-full flex-col justify-start gap-5 overflow-hidden`,children:[(0,R.jsx)(Dt,{title:e(`performance.cpu.title`)')
+        code = replace_one(code, 'className:`flex flex-wrap items-center gap-x-10 gap-y-5 overflow-hidden py-3`,children:[(0,R.jsx)(z,{title:e(`performance.cpu.utilization`)',
+                           'className:`pro-cpu-metrics flex flex-wrap items-center gap-x-10 gap-y-5 overflow-hidden py-3`,children:[(0,R.jsx)(z,{title:e(`performance.cpu.utilization`)')
         code = replace_one(code, 'className:`size-full overscroll-x-auto`',
                            'className:`pro-resource-tabs size-full overscroll-x-auto`')
         code = replace_one(code, 'component:ri}];return',
@@ -70,7 +78,7 @@ export {ProShell};
         code = replace_one(code, 'Mn=()=>(0,L.useContext)(An)', 'Mn=()=>ProUseNetwork((0,L.useContext)(An))')
         code = replace_one(code, 'sn=()=>(0,L.useContext)(an)', 'sn=()=>ProUseMemory((0,L.useContext)(an))')
         code = replace_one(code, "export{ii as default};",
-            "const {Temperature:ProTemperature,TemperatureIcon:ProTemperatureIcon,useCPUInfo:ProUseCPU,useMemoryInfo:ProUseMemory,useNetworkInfo:ProUseNetwork,useGPUInfo:ProUseGPU,Performance:ProPerformance,CPUChart:ProCPUChart,MemoryChart:ProMemoryChart,Overview:ProOverview} = createPerformance(L,{Performance:Dr,CPUChart:Ht,MemoryChart:ln,Overview:Tr,memoryType:xt.Mem});\nexport{ii as default};")
+            "const {Temperature:ProTemperature,TemperatureIcon:ProTemperatureIcon,useCPUInfo:ProUseCPU,useMemoryInfo:ProUseMemory,useNetworkInfo:ProUseNetwork,useGPUInfo:ProUseGPU,Performance:ProPerformance,CPUChart:ProCPUChart,MemoryChart:ProMemoryChart,Overview:ProOverview,OverviewGrid:ProOverviewGrid,Table:ProTable} = createPerformance(L,{Performance:Dr,CPUChart:Ht,MemoryChart:ln,Overview:Tr,NativeGrid:Qe,NativeTable:ge,useNativeCPU:Vt,useNativeMemory:sn,useNativeGPU:Xt,memoryType:xt.Mem});\nexport{ii as default};")
         code = f'import {{createPerformance}} from "{ENTRY}/native/history.js";\n' + code
     elif name == "cpu-chart.js":
         code = replace_one(code, 'time:c(t),all:s', 'time:e.proTime??c(t),history:!!e.proTime,all:s')
@@ -91,9 +99,36 @@ def page():
   const proUrl = new URL(location.href);
   proUrl.searchParams.set("anchor", "trim.resource-manager");
   history.replaceState(null, "", proUrl);
+  // The iframe viewport is authoritative; allow a per-device manual override.
+  let layoutMode = "auto";
+  try {{ layoutMode = proUrl.searchParams.get("view") || localStorage.getItem("resmonpro.layout") || "auto"; }} catch {{}}
+  if (!["auto","mobile","desktop"].includes(layoutMode)) layoutMode = "auto";
+  function applyProLayout() {{
+    const compact = layoutMode === "mobile" || (layoutMode === "auto" && (innerWidth <= 640 ||
+      (matchMedia("(pointer:coarse)").matches && innerWidth <= 1024)));
+    document.documentElement.dataset.proLayout = compact ? "mobile" : "desktop";
+    let theme = proUrl.searchParams.get("theme");
+    try {{if (!theme && parent !== window) theme = parent.document.body.getAttribute("theme-mode") === "dark" ? "dark" : "light";}} catch {{}}
+    if (theme !== "dark" && theme !== "light") theme = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    document.documentElement.dataset.proMobileTheme = compact ? theme : "";
+    const sheet = document.getElementById("pro-mobile-styles");
+    if (sheet) sheet.media = compact ? "all" : "not all";
+    window.dispatchEvent(new Event("pro-layout-change"));
+  }}
+  window.resmonproLayout = {{get mode() {{return layoutMode;}},setMode(value) {{
+    if (!["auto","mobile","desktop"].includes(value)) return;
+    layoutMode = value;
+    try {{localStorage.setItem("resmonpro.layout",value);}} catch {{}}
+    const url = new URL(location.href); url.searchParams.delete("view"); history.replaceState(null,"",url);
+    applyProLayout(); window.dispatchEvent(new Event("resize"));
+  }}}};
+  addEventListener("resize",applyProLayout); addEventListener("DOMContentLoaded",applyProLayout);
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change",applyProLayout);
+  try {{if (parent !== window) new MutationObserver(applyProLayout).observe(parent.document.body,{{attributes:true,attributeFilter:["theme-mode"]}});}} catch {{}}
+  applyProLayout();
   // fnOS remembers iframe window geometry per user; migrate this app once only.
   try {{
-    if (matchMedia("(max-width: 640px)").matches) throw new Error("Compact viewport");
+    if (document.documentElement.dataset.proLayout === "mobile") throw new Error("Compact viewport");
     const desktop = window.parent;
     const width = Math.min(1280, Math.max(640, desktop.innerWidth - 100));
     const height = Math.min(800, Math.max(480, desktop.innerHeight - 70));
@@ -121,6 +156,8 @@ html, body, #root { height: 100%; margin: 0; overflow: hidden; }
 .pro-shell .grid-cols-2 { grid-template-columns:repeat(2,minmax(0,1fr)); }
 @media(max-width:850px) { .pro-shell .grid-cols-2 { grid-template-columns:minmax(0,1fr); } }
 .pro-shell [role=tablist][aria-orientation=vertical] { width:170px!important; }
+.pro-layout-picker select { height:28px; border:1px solid var(--semi-color-border); border-radius:6px; background:var(--semi-color-bg-0); color:var(--semi-color-text-1); font-size:12px; padding:0 5px; }
+.pro-sr-only { position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); }
 .pro-range-bar > [role=status] { flex:1 1 180px; min-width:0; }
 .pro-range-bar > [role=group] { flex:0 1 auto; max-width:100%; }
 .pro-performance { width:100%; height:100%; min-height:0; display:flex; flex-direction:column; overflow:hidden; }
@@ -137,7 +174,7 @@ html, body, #root { height: 100%; margin: 0; overflow: hidden; }
 @media(max-width:760px) { .pro-shell [role=tablist][aria-orientation=vertical] { width:125px!important; } }
 
 </style>"""
-    html = replace_one(html, "</head>", style + f'<link rel="stylesheet" href="{ENTRY}/native/mobile.css">' + "</head>")
+    html = replace_one(html, "</head>", style + f'<link id="pro-mobile-styles" rel="stylesheet" media="not all" href="{ENTRY}/native/mobile.css">' + "</head>")
     recovery = f'''<aside id="pro-recovery" hidden style="position:fixed;bottom:12px;right:12px;z-index:99999;padding:10px;background:var(--semi-color-bg-0,#fff);border:1px solid var(--semi-color-border,#ddd);border-radius:6px">
 原版界面仍在加载。 <a href="{ENTRY}/basic">打开基础视图</a>
 </aside>

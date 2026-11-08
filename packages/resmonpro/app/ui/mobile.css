@@ -1,6 +1,14 @@
+html[data-pro-mobile-theme="dark"] .pro-shell {
+ color-scheme:dark;
+ --semi-color-app-container:#1e1e22; --semi-color-app:#1e1e22; --semi-color-bg-0:#1e1e22; --semi-color-bg-1:#28282d;
+ --semi-color-bg-2:#303036; --semi-color-bg-3:#38383e;
+ --semi-color-fill-0:#28282d; --semi-color-fill-1:#36363b; --semi-color-fill-2:#45454a;
+ --semi-color-text-0:#f2f2f5; --semi-color-text-1:#d3d3d9; --semi-color-text-2:#96969e;
+ --semi-color-text-nav:#aaaab3; --semi-color-border:#38383f; --semi-color-primary:#3487fb;
+}
 /* The stock resource monitor uses a desktop sidebar and a three-column grid.
    Keep its components, with an explicit compact layout for app WebViews. */
-@media (max-width: 640px) {
+@media all {
   .pro-shell { height:100%; max-height:100dvh; }
   .pro-shell .pro-app-tabs { flex-direction:column; min-width:0; }
   .pro-shell .pro-app-navigation { flex:none; width:100%; padding-top:0; }
@@ -46,4 +54,149 @@
   .pro-shell .semi-table { min-width:0; }
   .pro-shell .pro-resource-tabs [role=tabpanel] { min-width:0; }
   .pro-shell .recharts-default-tooltip { max-width:calc(100vw - 32px); white-space:normal; }
+}
+
+/* Match the native phone layout: bottom navigation and grouped summary cards. */
+@media all {
+  .pro-shell .pro-app-content { order:1; padding-bottom:0!important; }
+  .pro-shell .pro-app-navigation {
+    order:2; border-top:1px solid var(--semi-color-border);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+    background:var(--semi-color-bg-0); z-index:2;
+  }
+  .pro-shell .pro-app-navigation [role=tablist][aria-orientation=vertical] {
+    padding:6px 8px 8px; overflow:hidden;
+  }
+  .pro-shell .pro-app-navigation [role=tab] {
+    flex:1 1 0; min-width:0; height:56px; padding:4px!important;
+    background:transparent!important;
+  }
+  .pro-shell .pro-app-navigation [role=tab] > div {
+    flex-direction:column; gap:5px; font-size:11px;
+  }
+  .pro-shell .pro-app-navigation [role=tab] > div > div { width:22px!important; height:22px!important; }
+  .pro-shell .pro-app-navigation [role=tab] svg { width:22px; height:22px; }
+  .pro-shell .semi-tabs-bar { padding-left:0; justify-content:space-around; }
+  .pro-shell .semi-tabs-bar [role=tab] { margin-right:0; font-size:14px; }
+  .pro-mobile-overview { display:flex; flex-direction:column; gap:12px; }
+  .pro-mobile-uptime .pro-overview-card {
+    display:flex; flex-direction:row; align-items:center; justify-content:space-between;
+    padding:14px 16px; border-radius:16px; background:var(--semi-color-fill-0);
+  }
+  .pro-mobile-uptime .pro-overview-card > div { padding:0; height:auto; }
+  .pro-mobile-uptime .pro-overview-card > div:first-child { display:none; }
+  .pro-mobile-uptime .pro-overview-card > div:last-child,
+  .pro-mobile-uptime .pro-overview-card > div:last-child > div {
+    display:flex; flex-direction:row; justify-content:space-between; align-items:center; width:100%; gap:12px;
+  }
+  .pro-mobile-uptime .pro-overview-card > div:last-child > div > div:first-child { font-size:13px; }
+  .pro-mobile-uptime .pro-overview-card > div:last-child > div > div:last-child { font-size:12px; font-weight:500; }
+  .pro-mobile-summary { padding:20px 12px 14px; border-radius:18px; background:var(--semi-color-fill-0); }
+  .pro-mobile-rings { display:flex; justify-content:space-around; gap:8px; }
+  .pro-mobile-ring { flex:1; min-width:0; border:0; padding:0; background:transparent; cursor:pointer; color:var(--semi-color-text-1); }
+  .pro-mobile-ring-track {
+    --progress:0%; display:grid; place-items:center; width:clamp(68px,21vw,100px); aspect-ratio:1;
+    margin:auto; border-radius:50%; background:conic-gradient(var(--semi-color-primary) var(--progress),var(--semi-color-fill-2) 0); position:relative;
+  }
+  .pro-mobile-ring-track::before { content:""; position:absolute; inset:9px; border-radius:50%; background:var(--semi-color-bg-1); }
+  .pro-mobile-ring-value { position:relative; z-index:1; padding:12px; line-height:1.4; font-size:13px; max-width:90px; }
+  .pro-mobile-ring-label { display:block; margin-top:8px; font-size:14px; }
+  .pro-mobile-summary-details { display:flex; gap:8px; overflow-x:auto; margin-top:20px; padding-bottom:2px; scroll-snap-type:x proximity; }
+  .pro-mobile-summary-details > * { flex:0 0 112px; width:112px!important; min-width:0; scroll-snap-align:start; }
+  .pro-mobile-summary-details .pro-overview-card,
+  .pro-mobile-temperature { background:var(--semi-color-fill-1); border-radius:12px; }
+  .pro-mobile-summary-details .pro-overview-card > div:first-child { padding:10px 10px 0; }
+  .pro-mobile-summary-details .pro-overview-card > div:first-child img { display:none; }
+  .pro-mobile-summary-details .pro-overview-card > div:first-child div:has(> img) { display:none; }
+  .pro-mobile-summary-details .pro-overview-card p { font-size:13px; }
+  .pro-mobile-summary-details .pro-overview-card > div:last-child { height:auto; min-height:66px; flex-direction:column; gap:4px; align-items:stretch; padding:6px 10px 10px; }
+  .pro-mobile-summary-details .pro-overview-card > div:last-child > div { flex-direction:row; justify-content:space-between; align-items:center; gap:4px; }
+  .pro-mobile-summary-details .pro-overview-card > div:last-child > div > div { font-size:11px; }
+  .pro-mobile-summary-details .pro-overview-card svg { width:12px; }
+  .pro-mobile-temperature { padding:10px; line-height:1.9; font-size:12px; }
+  .pro-mobile-temperature strong { display:block; font-size:13px; }
+  .pro-cpu-panel { background:var(--semi-color-fill-0); border-radius:18px; margin:0 12px 16px; padding:16px; height:auto!important; min-height:0; }
+  .pro-cpu-panel > div:first-child { flex-direction:column; align-items:flex-start; gap:8px; }
+  .pro-cpu-panel > div:first-child > div { flex-basis:auto; flex-grow:0; }
+  .pro-cpu-panel > div:first-child > div:last-child { font-size:13px; line-height:1.6; }
+  .pro-shell .pro-cpu-panel .h-\[300px\] { height:220px!important; margin-top:16px; }
+  .pro-cpu-metrics { display:flex!important; flex-direction:column; align-items:stretch!important; gap:20px!important; padding-bottom:0; }
+  .pro-cpu-metrics > div { flex-shrink:0; }
+  .pro-cpu-metrics > div > div { width:100%; justify-content:space-between; }
+  .pro-cpu-metrics > div > div > div:first-child { flex-shrink:1; }
+  .pro-shell .pro-overview-disks .semi-table-header,
+  .pro-shell .pro-overview-disks thead,
+  .pro-shell .pro-overview-disks colgroup { display:none; }
+  .pro-shell .pro-overview-disks table { display:block; width:100%!important; min-width:0!important; }
+  .pro-shell .pro-overview-disks tbody { display:block; background:var(--semi-color-fill-0); border-radius:16px; padding:0 8px; }
+  .pro-shell .pro-overview-disks tr {
+    display:grid; grid-template-columns:16px minmax(0,1fr) minmax(0,1fr); column-gap:6px; row-gap:2px; padding:14px 0; border-bottom:1px solid var(--semi-color-border);
+  }
+  .pro-shell .pro-overview-disks tr:last-child { border-bottom:0; }
+  .pro-shell .pro-overview-disks td {
+    display:block; position:static!important; min-width:0!important; width:auto!important; padding:0!important; border:0!important; background:transparent!important; font-size:11px;
+  }
+  .pro-shell .pro-overview-disks td:nth-child(1) { grid-column:1; grid-row:1 / 5; align-self:center; color:var(--semi-color-text-2); }
+  .pro-shell .pro-overview-disks td:nth-child(2) { grid-column:2 / 4; grid-row:1; margin-bottom:4px; }
+  .pro-shell .pro-overview-disks td:nth-child(3) { grid-column:2; grid-row:2; }
+  .pro-shell .pro-overview-disks td:nth-child(4) { grid-column:2; grid-row:3; }
+  .pro-shell .pro-overview-disks td:nth-child(5) { grid-column:3; grid-row:2; }
+  .pro-shell .pro-overview-disks td:nth-child(6) { grid-column:3; grid-row:3; }
+  .pro-shell .pro-overview-disks td:nth-child(7) { grid-column:2 / 4; grid-row:4; color:var(--semi-color-text-2); }
+  .pro-shell .pro-overview-disks td:nth-child(n+3):nth-child(-n+6) { display:flex; gap:5px; align-items:center; }
+  .pro-shell .pro-overview-disks td:nth-child(3)::before { content:"温度"; color:var(--semi-color-text-2); }
+  .pro-shell .pro-overview-disks td:nth-child(4)::before { content:"繁忙度"; color:var(--semi-color-text-2); }
+  .pro-shell .pro-overview-disks td:nth-child(5)::before { content:"读取"; color:var(--semi-color-text-2); }
+  .pro-shell .pro-overview-disks td:nth-child(6)::before { content:"写入"; color:var(--semi-color-text-2); }
+}
+@media all {
+ .pro-range-bar { align-items:center!important; }
+ .pro-range-bar > [role=status] { flex:1 1 0; font-size:10px!important; }
+ .pro-layout-picker { flex:none; }
+ .pro-range-select { flex:none; width:86px; height:30px; border:1px solid var(--semi-color-border); border-radius:6px; padding:0 5px; background:var(--semi-color-bg-0); color:var(--semi-color-text-0); font-size:12px; }
+ .pro-layout-picker select { font-size:11px; max-width:84px; height:30px; }
+ .pro-mobile-process { height:100%; overflow:auto; overscroll-behavior:contain; padding:0 12px 16px; color:var(--semi-color-text-0); }
+ .pro-mobile-process-header, .pro-mobile-process-row > summary { display:grid; grid-template-columns:minmax(0,1fr) 64px 82px; gap:8px; align-items:center; }
+ .pro-mobile-process-header { position:sticky; top:0; z-index:1; background:var(--semi-color-bg-0); min-height:40px; border-bottom:1px solid var(--semi-color-border); }
+ .pro-mobile-process-header button { border:0; padding:8px 0; background:transparent; color:var(--semi-color-text-2); font-size:12px; text-align:right; }
+ .pro-mobile-process-header button:first-child { text-align:left; }
+ .pro-mobile-process-row { border-bottom:1px solid var(--semi-color-border); }
+ .pro-mobile-process-row > summary { min-height:48px; padding:10px 0; cursor:pointer; list-style:none; font-size:12px; }
+ .pro-mobile-process-row > summary::-webkit-details-marker { display:none; }
+ .pro-mobile-process-row > summary > span:not(:first-child) { text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap; }
+ .pro-mobile-process-name { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+ .pro-mobile-process-name::before { content:'›'; display:inline-block; width:14px; color:var(--semi-color-text-2); }
+ .pro-mobile-process-row[open] > summary .pro-mobile-process-name::before { transform:rotate(90deg); }
+ .pro-mobile-process-row dl { margin:0 0 10px 14px; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; padding:10px; background:var(--semi-color-fill-0); border-radius:8px; }
+ .pro-mobile-process-row dt { color:var(--semi-color-text-2); font-size:10px; }
+ .pro-mobile-process-row dd { margin:2px 0 0; font-size:11px; overflow-wrap:anywhere; }
+ .pro-mobile-process-children { padding-left:12px; }
+ .pro-mobile-process-row.nested > summary { grid-template-columns:minmax(0,1fr) 56px 72px; font-size:11px; }
+ .pro-mobile-process-row.nested:last-child { border:0; }
+ .pro-shell .pro-cpu-panel { overflow:visible; }
+ .pro-shell .pro-mobile-process-row span span { max-width:100%; }
+ .pro-performance-body .recharts-wrapper { touch-action:pan-y; }
+}
+@media all {
+ .pro-shell .pro-cpu-panel { margin:0 0 16px; }
+ .pro-mobile-summary-details > * { flex-basis:122px; width:122px!important; }
+ .pro-mobile-summary-details .pro-overview-card > div:last-child > div > div:first-child { white-space:nowrap; flex-shrink:0; }
+ .pro-mobile-process { padding-left:0; padding-right:0; }
+ .pro-mobile-process-row > summary { font-size:13px; }
+ .pro-mobile-process-name { display:flex; align-items:center; }
+ .pro-mobile-process-name > div { min-width:0; max-width:100%; }
+ .pro-mobile-process-name span { min-width:0; max-width:100%; overflow:hidden; text-overflow:ellipsis; }
+ .pro-mobile-process-name img { width:20px; height:20px; }
+ .pro-mobile-process-name .ml-\[48px\] { margin-left:0; }
+ .pro-cpu-metrics > div:last-child .text-\[20px\] { font-size:16px; }
+}
+@media all {
+ .pro-mobile-process-search { width:100%; height:34px; padding:0 10px; margin:0 0 6px; border:1px solid var(--semi-color-border); border-radius:8px; font-size:13px; background:var(--semi-color-bg-0); color:var(--semi-color-text-0); }
+ .pro-mobile-load-more { display:block; width:100%; margin-top:12px; padding:10px; border:1px solid var(--semi-color-border); border-radius:8px; color:var(--semi-color-primary); background:var(--semi-color-bg-0); }
+}
+
+@media all {
+ .pro-shell { color:var(--semi-color-text-0); }
+ .pro-shell .recharts-cartesian-axis-tick-value { fill:var(--semi-color-text-2)!important; }
+ .pro-shell .recharts-cartesian-grid line { stroke:var(--semi-color-border)!important; }
 }

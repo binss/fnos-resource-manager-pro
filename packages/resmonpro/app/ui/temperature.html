@@ -45,10 +45,10 @@ button.active { color:#fff; }
 <script>
 function syncTheme() {
  try {
-  const source=getComputedStyle(parent.document.documentElement);
+  const source=getComputedStyle(parent.document.querySelector('.pro-shell') || parent.document.documentElement);
   const mapping={'--bg':'--semi-color-bg-0','--panel':'--semi-color-bg-0','--line':'--semi-color-border','--text':'--semi-color-text-0','--muted':'--semi-color-text-2','--accent':'--semi-color-primary'};
   for(const [key,value] of Object.entries(mapping)) { const color=source.getPropertyValue(value).trim(); if(color)document.documentElement.style.setProperty(key,color); }
-  document.documentElement.style.colorScheme=parent.document.body.getAttribute('theme-mode')==='dark'?'dark':'light';
+  document.documentElement.style.colorScheme=(parent.document.documentElement.dataset.proMobileTheme || parent.document.body.getAttribute('theme-mode'))==='dark'?'dark':'light';
  } catch {}
 }
 syncTheme();

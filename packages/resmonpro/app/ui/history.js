@@ -1,11 +1,14 @@
+import {createMobileViews, useCompactLayout} from "./mobile.js";
 const endpoint = "/cgi/ThirdParty/resmonpro/index.cgi/api/history";
 const ranges = [[0, "实时"], [1, "1 小时"], [24, "24 小时"], [168, "7 天"], [720, "30 天"]];
 
-export function createPerformance(React, {Performance, CPUChart, MemoryChart, Overview, memoryType}) {
+export function createPerformance(React, {Performance, CPUChart, MemoryChart, Overview, NativeGrid, NativeTable, useNativeCPU, useNativeMemory, useNativeGPU, memoryType}) {
     const h = React.createElement;
     const Context = React.createContext({hours: 0, data: null, live: null});
 
+    const {OverviewGrid, Table} = createMobileViews(React, {NativeGrid, NativeTable, useNativeCPU, useNativeMemory, useNativeGPU});
     function PerformanceWithRange(props) {
+        const compact = useCompactLayout(React);
         const [hours, setHours] = React.useState(0);
         const [result, setResult] = React.useState(null);
         const [live, setLive] = React.useState(null);
@@ -56,6 +59,12 @@ export function createPerformance(React, {Performance, CPUChart, MemoryChart, Ov
                 h("div", {className: "pro-range-bar", style: {display: "flex", alignItems: "center", justifyContent: "space-between",
                     gap: 8, flexWrap: "wrap", minWidth: 0, padding: "8px 16px", boxSizing: "border-box"}},
                     h("span", {style: {fontSize: 12, color: "var(--semi-color-text-2)"}, role: "status"}, status),
+                    h("label", {className:"pro-layout-picker"}, h("span", {className:"pro-sr-only"}, "界面布局"),
+                        h("select", {"aria-label":"界面布局", defaultValue:window.resmonproLayout?.mode || "auto",
+                            onChange:event=>window.resmonproLayout?.setMode(event.target.value)},
+                            [["auto","自动布局"],["mobile","手机布局"],["desktop","桌面布局"]].map(([value,label])=>h("option",{value,key:value},label)))),
+                    compact ? h("select", {className:"pro-range-select", "aria-label":"运行状态时间范围", value:hours,
+                        onChange:event=>setHours(Number(event.target.value))}, ranges.map(([value,label])=>h("option",{key:value,value},label))) :
                     h("div", {role: "group", "aria-label": "运行状态时间范围", style: {display: "flex", gap: 4, flexWrap: "wrap"}},
                         ranges.map(([value, label]) => h("button", {key: value, type: "button",
                             "aria-pressed": hours === value, onClick: () => setHours(value),
@@ -161,6 +170,6 @@ export function createPerformance(React, {Performance, CPUChart, MemoryChart, Ov
         Performance: PerformanceWithRange,
         CPUChart: props => h(HistoricalChart, {kind: "cpu", props}),
         MemoryChart: props => h(HistoricalChart, {kind: "memory", props}),
-        Overview
+        Overview, OverviewGrid, Table
     };
 }
