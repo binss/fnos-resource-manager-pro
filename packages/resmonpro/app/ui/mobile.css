@@ -65,7 +65,8 @@ html[data-pro-mobile-theme="dark"] .pro-shell {
   .pro-shell .pro-app-content { order:1; padding-bottom:0!important; }
   .pro-shell .pro-app-navigation {
     order:2; border-top:1px solid var(--semi-color-border);
-    padding-bottom:env(safe-area-inset-bottom,0px);
+    /* Keep the navigation low in the App WebView instead of reserving the full inset. */
+    padding-bottom:min(12px,env(safe-area-inset-bottom,0px));
     background:var(--semi-color-bg-0); z-index:2;
   }
   .pro-shell .pro-app-navigation [role=tablist][aria-orientation=vertical] {
