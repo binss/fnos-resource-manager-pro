@@ -39,6 +39,10 @@ export {ProShell};
 """
         code += shell
     elif name == "appview.js":
+        # Pro owns the safe-area padding in its bottom navigation. The stock
+        # wrapper subtracts it as well, exposing the document beneath the app.
+        code = replace_one(code, 'relative z-0 h-[calc(100vh-env(safe-area-inset-bottom))] w-full overflow-hidden',
+                           'pro-appview relative z-0 h-full w-full overflow-hidden')
         start = code.index('k=({app:e,parsed:t,onClose:n})=>')
         end = code.index(',A=({app:e,parsed:t,onClose:n,taskWindows:', start)
         code = code[:start] + 'k=({app:e,parsed:t})=>(0,x.jsx)(ProShell,{children:O(e,t)})' + code[end:]
@@ -150,6 +154,7 @@ def page():
     style = """<style>
 html, body { background: var(--semi-color-app, var(--semi-color-bg-0, #fff)); }
 html, body, #root { height: 100%; margin: 0; overflow: hidden; }
+.pro-appview { height:100vh; height:100dvh; }
 .pro-shell { height:100dvh; width:100%; font-size:14px; line-height:1.5; overflow:hidden; background:var(--semi-color-app); }
 .pro-shell *, .pro-shell *::before, .pro-shell *::after { box-sizing:border-box; }
 .pro-shell [role=tabpanel] { min-width:0; min-height:0; max-width:100%; }

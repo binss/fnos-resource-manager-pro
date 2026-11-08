@@ -1,3 +1,7 @@
+/* Paint the whole document, including the iOS home-indicator safe area. */
+html[data-pro-layout="mobile"], html[data-pro-layout="mobile"] body,
+html[data-pro-layout="mobile"] #root { background:var(--pro-mobile-canvas,#fff); }
+html[data-pro-mobile-theme="dark"] { --pro-mobile-canvas:#1e1e22; color-scheme:dark; }
 html[data-pro-mobile-theme="dark"] .pro-shell {
  color-scheme:dark;
  --semi-color-app-container:#1e1e22; --semi-color-app:#1e1e22; --semi-color-bg-0:#1e1e22; --semi-color-bg-1:#28282d;
@@ -22,7 +26,7 @@ html[data-pro-mobile-theme="dark"] .pro-shell {
   .pro-shell .pro-app-navigation [role=tab] > div { justify-content:center; }
   .pro-shell .pro-app-content {
     width:100%; min-width:0; min-height:0; padding:0!important;
-    padding-bottom:env(safe-area-inset-bottom,0px)!important;
+    padding-bottom:0!important;
   }
   .pro-shell .pro-app-content > [role=tabpanel] { width:100%; min-width:0!important; }
   .pro-range-bar { padding:8px 12px!important; gap:6px!important; }
