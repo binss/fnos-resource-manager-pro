@@ -104,3 +104,48 @@ footer{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-si
  .policy-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
 }
 @media(prefers-reduced-motion:reduce){.spinning #blades{animation:none}}
+
+/* Use the desktop width for two independent device panels. */
+.fan-layout{display:grid;grid-template-columns:minmax(250px,.85fr) minmax(0,1.4fr);gap:14px;align-items:start}
+.nas-column,#dashboard{min-width:0}
+.cabinet-card .device-heading{margin:0 0 12px}
+.cabinet-card .hero{padding-bottom:14px;margin-bottom:14px;border-bottom:1px solid var(--line);min-height:0}
+.cabinet-card .control .section-head{margin-bottom:8px}
+.nas-column .nas-modes{grid-template-columns:1fr;gap:6px}
+.nas-column .nas-modes button{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:7px 10px}
+.nas-column .nas-modes span{margin:0;text-align:right}
+.nas-column .policy-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.nas-rpm{margin-bottom:12px}
+.description{margin:8px 0 12px}
+.cabinet-card .hero .temperature{padding-left:14px}
+#dashboard footer{padding:0 2px 4px}
+@media(min-width:780px){
+ .cabinet-card{margin-bottom:8px}
+ .cabinet-card .hero-reading{flex:1}
+ .cabinet-card .temperature{max-width:46%}
+ .cabinet-card .fan-visual{width:44px;height:44px}
+ .cabinet-card .big-number{font-size:28px}
+ .cabinet-card .temperature strong{font-size:22px}
+}
+@media(max-width:779px){
+ .fan-layout{display:flex;flex-direction:column;gap:0}
+ .nas-column,#dashboard{width:100%}
+ .nas-column{display:contents}
+ .nas-control{order:0;width:100%}
+ #dashboard{order:1}
+ #fan-policy{order:2;width:100%}
+ .nas-column .nas-modes{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .nas-column .nas-modes button{display:block;padding:8px}
+ .nas-column .nas-modes span{text-align:left;margin-top:3px}
+ .cabinet-card .hero .temperature{padding-left:0}
+}
+@media(min-width:780px){
+ .nas-column .policy-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+ .nas-column .policy-grid div{padding-left:6px}
+ .nas-column .policy-grid span{font-size:10px;white-space:nowrap}
+ .nas-column .policy-grid strong{font-size:16px}
+ .nas-control .section-head{margin-bottom:8px}
+ .nas-control .nas-modes button{padding:5px 8px}
+ .nas-control>.small{margin:8px 0}
+ .nas-column .policy p{font-size:11px;line-height:1.6;margin-top:10px}
+}

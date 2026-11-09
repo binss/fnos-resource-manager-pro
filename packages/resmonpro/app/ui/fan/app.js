@@ -34,6 +34,7 @@ function render(next) {
   if (next.temperature_entity) $('temperature-entity').value=next.temperature_entity;
   $('setup').hidden = next.configured && !configuring;
   $('dashboard').hidden = !next.configured;
+  $('fan-policy').hidden = !next.configured;
   $('cancel-settings').hidden = !next.configured;
   if (!next.configured) return;
   $('actual-speed').textContent = next.on ? (next.speed ?? '—') : next.available ? '0' : '—';
@@ -116,7 +117,7 @@ function renderNas(result) {
     button.disabled = nasBusy || !result.supported;
     button.setAttribute('aria-pressed', String(Number(button.dataset.nasMode) === result.mode));
   }
-  $('nas-status').textContent = result.supported ? '使用飞牛原生风扇模式。此处切换不会改变弱电箱温控。' : '当前设备未开放原生风扇模式控制。弱电箱控制仍可独立使用。';
+  $('nas-status').textContent = result.supported ? 'NAS 与弱电箱独立控制。' : '当前设备未开放原生风扇模式控制。弱电箱控制仍可独立使用。';
 }
 async function refreshNas() {
   if (nasBusy || nasRefreshing) return;
