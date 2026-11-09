@@ -71,7 +71,7 @@ export {ProShell};
         code = replace_one(code, 'className:`size-full overscroll-x-auto`',
                            'className:`pro-resource-tabs size-full overscroll-x-auto`')
         code = replace_one(code, 'component:ri}];return',
-                           'component:ri},{icon:ProTemperatureIcon,key:`hardware-temperature`,title:`硬件温度`,component:ProTemperature}];return')
+                           'component:ri},{icon:ProTemperatureIcon,key:`hardware-temperature`,title:`硬件温度`,component:ProTemperature},{icon:ProFanIcon,key:`fan-control`,title:`风扇控制`,component:ProFan}];return')
         code = replace_one(code, 'Or=()=>(0,R.jsx)(ze,{component:Dr})',
                            'Or=()=>(0,R.jsx)(ze,{component:ProPerformance})')
         code = replace_one(code, '(0,R.jsx)(Ht,{data:n,num:c})', '(0,R.jsx)(ProCPUChart,{data:n,num:c})')
@@ -82,7 +82,7 @@ export {ProShell};
         code = replace_one(code, 'Mn=()=>(0,L.useContext)(An)', 'Mn=()=>ProUseNetwork((0,L.useContext)(An))')
         code = replace_one(code, 'sn=()=>(0,L.useContext)(an)', 'sn=()=>ProUseMemory((0,L.useContext)(an))')
         code = replace_one(code, "export{ii as default};",
-            "const {Temperature:ProTemperature,TemperatureIcon:ProTemperatureIcon,useCPUInfo:ProUseCPU,useMemoryInfo:ProUseMemory,useNetworkInfo:ProUseNetwork,useGPUInfo:ProUseGPU,Performance:ProPerformance,CPUChart:ProCPUChart,MemoryChart:ProMemoryChart,Overview:ProOverview,OverviewGrid:ProOverviewGrid,Table:ProTable} = createPerformance(L,{Performance:Dr,CPUChart:Ht,MemoryChart:ln,Overview:Tr,NativeGrid:Qe,NativeTable:ge,useNativeCPU:Vt,useNativeMemory:sn,useNativeGPU:Xt,memoryType:xt.Mem});\nexport{ii as default};")
+            "const {Fan:ProFan,FanIcon:ProFanIcon,Temperature:ProTemperature,TemperatureIcon:ProTemperatureIcon,useCPUInfo:ProUseCPU,useMemoryInfo:ProUseMemory,useNetworkInfo:ProUseNetwork,useGPUInfo:ProUseGPU,Performance:ProPerformance,CPUChart:ProCPUChart,MemoryChart:ProMemoryChart,Overview:ProOverview,OverviewGrid:ProOverviewGrid,Table:ProTable} = createPerformance(L,{Performance:Dr,CPUChart:Ht,MemoryChart:ln,Overview:Tr,NativeGrid:Qe,NativeTable:ge,useNativeCPU:Vt,useNativeMemory:sn,useNativeGPU:Xt,memoryType:xt.Mem});\nexport{ii as default};")
         code = f'import {{createPerformance}} from "{ENTRY}/native/history.js";\n' + code
     elif name == "cpu-chart.js":
         code = replace_one(code, 'time:c(t),all:s', 'time:e.proTime??c(t),history:!!e.proTime,all:s')

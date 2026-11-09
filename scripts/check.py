@@ -20,6 +20,8 @@ with tempfile.TemporaryDirectory(prefix='resmon-source-check-') as directory:
         if path.suffix=='.html':
             for index,part in enumerate(path.read_text().split('<script>')[1:]):
                 target=temporary/('inline-'+str(index)+'.js');target.write_text(part.split('</script>',1)[0]);subprocess.run(['node','--check',str(target)],check=True)
+subprocess.run([sys.executable,str(ROOT/'tests/test_fan_controller.py')],check=True)
+subprocess.run([sys.executable,str(ROOT/'tests/test_fan_native.py')],check=True)
 subprocess.run([sys.executable,str(ROOT/'tests/test_storage.py')],check=True)
 subprocess.run([sys.executable,str(ROOT/'tests/test_integration.py')],check=True)
 subprocess.run([sys.executable,str(ROOT/'tests/test_mobile_data.py')],check=True)

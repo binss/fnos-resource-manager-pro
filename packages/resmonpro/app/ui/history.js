@@ -155,6 +155,13 @@ export function createPerformance(React, {Performance, CPUChart, MemoryChart, Ov
         return {...original, latestMen: {...original.latestMen, mem: {...original.latestMen.mem,
             total, used, available: total - used, free: total - used, physical: total}}};
     }
+    function Fan() {
+        return h("iframe", {title:"风扇控制",src:"/cgi/ThirdParty/resmonpro/index.cgi/fan/",
+            style:{width:"100%",height:"100%",display:"block",border:0},referrerPolicy:"same-origin"});
+    }
+    function FanIcon(props) {
+        return h("svg",{...props,width:20,height:20,viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:1.7,"aria-hidden":true},h("path",{d:"M12 10C4 7 9 1 13 4s0 6-1 6Zm2 2c3-8 9-3 6 1s-6 0-6-1Zm-2 2c8 3 3 9-1 6s0-6 1-6Zm-2-2c-3 8-9 3-6-1s6 0 6 1Z"}));
+    }
     function Temperature() {
         return h("iframe", {title:"硬件温度面板", src:"/cgi/ThirdParty/resmonpro/index.cgi/temperature/",
             className:"pro-temperature-frame", style:{width:"100%",height:"100%",display:"block",border:0},
@@ -166,7 +173,7 @@ export function createPerformance(React, {Performance, CPUChart, MemoryChart, Ov
             h("path",{d:"M12 8v9"}),h("circle",{cx:12,cy:18,r:1.5,fill:"currentColor",stroke:"none"}));
     }
     return {
-        useCPUInfo, useMemoryInfo, useNetworkInfo, useGPUInfo, Temperature, TemperatureIcon,
+        useCPUInfo, useMemoryInfo, useNetworkInfo, useGPUInfo, Temperature, TemperatureIcon, Fan, FanIcon,
         Performance: PerformanceWithRange,
         CPUChart: props => h(HistoricalChart, {kind: "cpu", props}),
         MemoryChart: props => h(HistoricalChart, {kind: "memory", props}),

@@ -27,6 +27,11 @@ static = {"/gateway.js": ("gateway.js", "application/javascript; charset=utf-8")
           "/basic": ("index.html", "text/html; charset=utf-8"),
           "/panel.js": ("panel.js", "application/javascript; charset=utf-8"),
           "/style.css": ("style.css", "text/css; charset=utf-8")}
+if path.startswith('/fan/'):
+    import runpy
+    runpy.run_path(str(root / 'ui/fan/index.cgi'), run_name='__main__')
+    raise SystemExit
+
 try:
     if method not in ("GET", "HEAD"):
         status, body = "405 Method Not Allowed", b'{"error":"Method not allowed"}'
