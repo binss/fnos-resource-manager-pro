@@ -38,6 +38,12 @@ def module(web=WEB):
         raise ValueError('Unsupported fnOS bootstrap')
     # Retain all exports for cyclic system dependencies; suppress only desktop mounting.
     code = code[:start] + 'void 0' + code[end:]
+    # The resource app gateway already authenticated this page. Do not run the
+    # desktop client's cookie cleanup or login / refresh-token workflow.
+    cleanup = '!jq&&!xY()&&(AY(),jY(),DY=void 0);'
+    if code.count(cleanup) != 1:
+        raise ValueError('Unsupported fnOS authentication bootstrap')
+    code = code.replace(cleanup, 'void 0;', 1)
     code = RELATIVE.sub(lambda match: match[1] + '/assets/' + match[2] + match[1], code)
     code += '''
 let fanClientPromise;
@@ -45,12 +51,19 @@ function fanClient() {
  if (fanClientPromise) return fanClientPromise;
  fanClientPromise=(async()=>{
   const socket=new EG(`${v}?type=resmonpro-fan`,{timeout:8000,isMain:false,genReqId:RK,
-    preflight:async()=>{await XX(socket,true);await GX(socket);}});
+    preflight:async()=>{
+     await XX(socket,true);
+     // Authenticate this socket using only the current same-origin session.
+     // Never start login, clear credentials, or redirect the fan frame.
+     const reply=await socket.send({req:aK.authToken,...(xY()&&OY()?{token:OY()}:{})},
+       {skipPreflight:true,timeout:8000});
+     if(reply?.result==='fail'||reply?.errno)throw new Error('当前应用会话无法读取风扇，请从飞牛 App 重新打开资源管理 Pro。');
+    }});
   socket.useReq(CX);
   socket.useRes(response=>{if(response.data?.token) socket.token=response.data.token;return response;});
   socket.on(SG.CLOSE,()=>{fanClientPromise=undefined;});
   addEventListener('pagehide',()=>{try{socket.close();}catch{}},{once:true});
-  await socket.init();
+  try { await socket.init(); } catch(error) { try { socket.close(); } catch {} throw error; }
   return new yHe(socket,{useIntlLogin:false});
  })().catch(error=>{fanClientPromise=undefined;throw error;});
  return fanClientPromise;

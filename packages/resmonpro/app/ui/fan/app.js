@@ -123,10 +123,10 @@ async function refreshNas() {
   nasRefreshing = true;
   $('nas-refresh').disabled = true;
   try { const client = await nativeClient(); renderNas(await nasTimeout(client.readNasFan())); }
-  catch {
+  catch (error) {
     $('nas-mode-label').textContent = '暂未连接'; $('nas-mode-label').className = 'tag warning';
     $('nas-rpm').textContent = '无法读取 NAS 风扇状态';
-    $('nas-status').textContent = '请从已登录的飞牛桌面打开本 App，并使用管理员账号。若系统已升级，原生接口可能需要适配。';
+    $('nas-status').textContent = error.message || '当前应用会话无法读取风扇，请从飞牛 App 重新打开资源管理 Pro。';
     for (const button of document.querySelectorAll('[data-nas-mode]')) button.disabled = true;
   } finally { nasRefreshing = false; $('nas-refresh').disabled = false; }
 }

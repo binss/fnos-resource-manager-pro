@@ -1,0 +1,14 @@
+import assert from 'node:assert/strict';
+const {fanClient}=await import(process.env.FAN_SESSION_MODULE);
+const fixture=globalThis.fanSessionFixture;
+const client=await fanClient();
+assert.equal(client.socket.options.isMain,false);
+assert.deepEqual(fixture.calls,[{req:'user.authToken'}]);
+assert.equal(await fanClient(),client);
+fixture.close();fixture.legacy=true;fixture.calls=[];
+await fanClient();assert.deepEqual(fixture.calls,[{req:'user.authToken',token:'existing-session'}]);
+fixture.close();fixture.fail=true;
+await assert.rejects(fanClient(),/当前应用会话/);
+fixture.fail=false;await fanClient();
+assert.equal(fixture.loginAttempts,0);
+console.log('PASS: existing cookie and legacy sessions, reconnect, authentication failure without login or redirects');
