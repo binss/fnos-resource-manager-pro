@@ -149,5 +149,34 @@ $('nas-refresh').addEventListener('click', refreshNas);
 refreshNas();
 setInterval(()=>{if(nasState?.supported && !document.hidden)refreshNas();},15000);
 
-function syncTheme(){try{const root=parent.document.documentElement;const dark=root.dataset.theme==='dark'||root.dataset.proMobileTheme==='dark'||parent.document.body.getAttribute('theme-mode')==='dark'||parent.document.querySelector('.pro-shell [theme-mode="dark"]');document.documentElement.dataset.theme=dark?'dark':root.dataset.theme==='light'?'light':matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'}catch{}}
-syncTheme();setInterval(syncTheme,2000);
+// Inherit the same fnOS / phone theme tokens as the other Pro pages.
+function syncTheme(){
+  try {
+    const host=parent.document;
+    const source=host.querySelector('.pro-shell')||host.documentElement;
+    const styles=parent.getComputedStyle(source);
+    const root=document.documentElement;
+    const theme=host.documentElement.dataset.theme||host.documentElement.dataset.proMobileTheme||host.body.getAttribute('theme-mode')||(host.documentElement.classList.contains('dark')?'dark':host.documentElement.classList.contains('light')?'light':null);
+    const dark=theme?theme==='dark':parent.matchMedia('(prefers-color-scheme:dark)').matches;
+    root.dataset.theme=dark?'dark':'light';root.style.colorScheme=dark?'dark':'light';
+    const mapping={
+      '--bg':['--bg','--semi-color-bg-0'], '--panel':['--card','--semi-color-bg-1'],
+      '--tile':['--tile','--semi-color-fill-0'], '--line':['--line','--semi-color-border'],
+      '--text':['--text','--semi-color-text-0'], '--muted':['--muted','--semi-color-text-2'],
+      '--accent':['--blue','--semi-color-primary'], '--success':['--semi-color-success'],
+      '--warning':['--semi-color-warning']
+    };
+    for(const [target,names] of Object.entries(mapping)){
+      const value=names.map(name=>styles.getPropertyValue(name).trim()).find(Boolean);
+      if(value)root.style.setProperty(target,value);else root.style.removeProperty(target);
+    }
+    root.style.setProperty('--font',styles.fontFamily);
+  }catch{/* Standalone preview uses the system color scheme. */}
+}
+syncTheme();
+try{
+ const observer=new MutationObserver(syncTheme);
+ for(const node of [parent.document.documentElement,parent.document.body,parent.document.querySelector('.pro-shell')].filter(Boolean))
+   observer.observe(node,{attributes:true,attributeFilter:['class','style','theme-mode','data-theme','data-pro-mobile-theme']});
+ parent.matchMedia('(prefers-color-scheme:dark)').addEventListener('change',syncTheme);
+}catch{}
