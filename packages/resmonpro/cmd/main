@@ -15,7 +15,8 @@ case "${1:-}" in
         command -v python3 >/dev/null || { echo '需要系统 Python 3' > "$TRIM_TEMP_LOGFILE"; exit 1; }
         mkdir -p "$TRIM_PKGVAR"
         nohup /usr/bin/python3 "$SERVER" >> "${TRIM_PKGVAR}/service.log" 2>&1 < /dev/null &
-        echo "$!" > "$PID_FILE"
+        started_pid=$!
+        echo "$started_pid" > "$PID_FILE"
         for i in {1..20}; do
             if [ -s "${TRIM_PKGVAR}/history.sqlite3" ] && status; then
                 if /usr/bin/python3 -c 'import urllib.request; urllib.request.urlopen("http://127.0.0.1:39188/api/current",timeout=1)' 2>/dev/null; then
@@ -23,7 +24,8 @@ case "${1:-}" in
                     exit 0
                 fi
             fi
-            status || break
+            # The child can still be between fork and exec on the first check.
+            kill -0 "$started_pid" 2>/dev/null || break
             sleep 1
         done
         if status; then kill -TERM "$pid"; fi
